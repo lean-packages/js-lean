@@ -1,0 +1,21 @@
+# Source and tests
+src/
+test/
+
+# Config files
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+eslint.config.js
+.prettierrc.json
+.prettierignore
+.editorconfig
+
+.github/
+CHANGELOG.md
+CONTRIBUTING.md
+RELEASE.md
+
+# Coverage and build artifacts
+coverage/
+*.tsbuildinfo
