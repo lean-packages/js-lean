@@ -200,6 +200,6 @@ This project is licensed under the MIT license. Please see [LICENSE.md](LICENSE.
 
 ## Related projects
 
-- [lean-package-validator](https://github.com/lean-packages/lean-package-validator) — The `PHP` counterpart.
+- [php-lean](https://github.com/lean-packages/php-lean) — The `PHP` counterpart.
 - [cargo-lean](https://github.com/lean-packages/cargo-lean) — The `Rust` counterpart.
 - [py-lean](https://github.com/lean-packages/py-lean) — The `Python` counterpart.
