@@ -1,6 +1,6 @@
 {
   "name": "js-lean",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A CLI tool for validating and optimizing JavaScript package distribution archives.",
   "type": "module",
   "license": "MIT",
