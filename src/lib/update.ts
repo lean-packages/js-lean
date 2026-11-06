@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export type UpdateChange = {
@@ -229,10 +229,21 @@ export function updateProject(
     throw new Error("could not parse package.json");
   }
 
+  // Read the directory entries once so existence checks match the exact
+  // filename casing. `existsSync` is case-insensitive on case-insensitive
+  // filesystems (e.g. macOS), which would otherwise cause mis-cased entries
+  // (e.g. `src` when the repository actually contains `Src`) to be proposed.
+  let entries: Set<string>;
+  try {
+    entries = new Set(readdirSync(cwd));
+  } catch {
+    entries = new Set<string>();
+  }
+
   const existsDir = (segment: string): boolean => {
-    const target = join(cwd, segment);
+    if (!entries.has(segment)) return false;
     try {
-      return existsSync(target) && statSync(target).isDirectory();
+      return statSync(join(cwd, segment)).isDirectory();
     } catch {
       return false;
     }
@@ -262,7 +273,7 @@ export function updateProject(
   const npmignorePath = join(cwd, ".npmignore");
   if (existsSync(npmignorePath)) {
     const content = readFileSync(npmignorePath, "utf8");
-    const existsEntry = (entry: string): boolean => existsSync(join(cwd, entry));
+    const existsEntry = (entry: string): boolean => entries.has(entry);
     const missing = computeMissingNpmignore(content, existsEntry);
     if (missing.length > 0) {
       if (!dryRun) {

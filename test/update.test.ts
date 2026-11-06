@@ -140,6 +140,36 @@ describe("updateProject", () => {
     expect(() => updateProject(dir)).toThrow();
   });
 
+  it("does not propose mis-cased entries on case-insensitive filesystems", () => {
+    // Regression: on case-insensitive filesystems (e.g. macOS) a naive
+    // `existsSync` check matches a differently-cased name, which would cause
+    // entries such as `src` to be proposed even though the repository only
+    // contains `Src`. Existence must be verified against exact directory
+    // entries instead.
+    writeFileSync(
+      join(dir, "package.json"),
+      JSON.stringify({ name: "x", version: "1.0.0", files: ["README.md"] }, null, 2) +
+        "\n",
+    );
+    // Directory with non-canonical casing; no canonical `src`/`dist` present.
+    mkdirSync(join(dir, "Src"));
+    // File with non-canonical casing for an artefact candidate.
+    writeFileSync(join(dir, "TSConfig.json"), "{}\n");
+    writeFileSync(join(dir, ".npmignore"), "node_modules\n");
+
+    const result = updateProject(dir);
+
+    // Nothing should be added: neither `src` nor `tsconfig.json` exist with
+    // their canonical casing.
+    expect(result.changed).toBe(false);
+
+    const npmignore = readFileSync(join(dir, ".npmignore"), "utf8");
+    expect(npmignore).toBe("node_modules\n");
+
+    const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+    expect(pkg.files).toEqual(["README.md"]);
+  });
+
   it("does not write any files in dry-run mode", () => {
     writeFileSync(
       join(dir, "package.json"),

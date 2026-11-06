@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Case-sensitive file existence checks: On case-insensitive filesystems (e.g., macOS), the `update` command could add
+  mis-cased entries to `files` or `.npmignore` (e.g., `src` when the repository actually contains `Src`), because
+  `existsSync` matches differently-cased names. File existence is now verified by reading directory entries to ensure
+  exact filename matches.
+
 ## [0.1.0] - 2026-11-03
 
 ### Added
