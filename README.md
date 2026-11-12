@@ -203,3 +203,4 @@ This project is licensed under the MIT license. Please see [LICENSE.md](LICENSE.
 - [php-lean](https://github.com/lean-packages/php-lean) — The `PHP` counterpart.
 - [cargo-lean](https://github.com/lean-packages/cargo-lean) — The `Rust` counterpart.
 - [py-lean](https://github.com/lean-packages/py-lean) — The `Python` counterpart.
+- [zig-lean](https://github.com/lean-packages/zig-lean) — The `Zig` equivalent.
